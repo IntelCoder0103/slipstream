@@ -1,9 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import CustomerForm from './Partials/CustomerForm.vue';
 import { ref } from 'vue';
 import axios from 'axios';
+import CustomersFilterForm from './Partials/CustomersFilterForm.vue';
 
 defineProps({
   customers: {
@@ -16,11 +17,11 @@ defineProps({
   },
 });
 
-const showForm = ref(false);
+const isShowForm = ref(false);
 const customer = ref(null);
 
 const closeModal = () => {
-  showForm.value = false;
+  isShowForm.value = false;
 }
 
 const openModal = async (customerId) => {
@@ -31,7 +32,7 @@ const openModal = async (customerId) => {
     customer.value = null;
   }
 
-  showForm.value = true;
+  isShowForm.value = true;
 }
 
 const deleteCustomer = (customerId) => {
@@ -66,6 +67,9 @@ const deleteCustomer = (customerId) => {
         </div>
         <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
           <div class="p-6 text-gray-900">
+            <div>
+              <CustomersFilterForm :categories="categories" />
+            </div>
             <table class="w-full text-center">
               <thead>
                 <tr>
@@ -100,6 +104,6 @@ const deleteCustomer = (customerId) => {
       </div>
     </div>
 
-    <CustomerForm :show="showForm" :categories="categories" :customer="customer" @close="closeModal()" />
+    <CustomerForm :show="isShowForm" :categories="categories" :customer="customer" @close="closeModal()" />
   </AuthenticatedLayout>
 </template>

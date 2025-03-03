@@ -18,10 +18,27 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $customers = Customer::with('category')->withCount('contacts')->get();
+        $query = Customer::with('category')->withCount('contacts');
+
+        // Filter by search query (name or reference)
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('reference', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Get filtered customers
+        $customers = $query->get();
+
         $categories = Category::all();
         return Inertia::render('Customers/Index', [
             'customers' => $customers,
