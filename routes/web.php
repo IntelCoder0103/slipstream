@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('customers', CustomerController::class);
-Route::resource('contacts', ContactController::class);
-Route::resource('categories', CategoryController::class);
+Route::resource('customers', CustomerController::class)->middleware(['auth', 'verified']);
+Route::resource('contacts', ContactController::class)->middleware(['auth', 'verified']);
+Route::resource('categories', CategoryController::class)->middleware(['auth', 'verified']);
 require __DIR__.'/auth.php';
