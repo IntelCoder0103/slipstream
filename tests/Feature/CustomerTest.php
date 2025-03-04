@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
 use App\Models\Customer;
 use App\Models\Category;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -38,7 +39,11 @@ class CustomerTest extends TestCase
     /** @test */
     public function it_renders_customers_index_page()
     {
-        $response = $this->get('/customers');
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/customers');
 
         $response->assertStatus(200)
                  ->assertInertia(fn (Assert $page) => $page
@@ -51,7 +56,11 @@ class CustomerTest extends TestCase
     /** @test */
     public function it_filters_customers_by_search_query()
     {
-        $response = $this->get('/customers?search=John');
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/customers?search=John');
 
         $response->assertStatus(200)
                  ->assertInertia(fn (Assert $page) => $page
@@ -66,7 +75,11 @@ class CustomerTest extends TestCase
     /** @test */
     public function it_filters_customers_by_category()
     {
-        $response = $this->get('/customers?category_id=' . $this->category1->id);
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/customers?category_id=' . $this->category1->id);
 
         $response->assertStatus(200)
                  ->assertInertia(fn (Assert $page) => $page

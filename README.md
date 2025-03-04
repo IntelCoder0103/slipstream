@@ -104,15 +104,14 @@ cp .env.example .env.testing
 ```
 Update `.env.testing` with your database details:
 ```env
-DB_DATABASE=your_testing_database_name
-DB_USERNAME=your_testing_database_user
-DB_PASSWORD=your_testing_database_password
+APP_ENV=testing
+DB_CONNECTION=sqlite
+DB_DATABASE=:memory:
 ```
 
 To run tests, use the following command:
 
 ```bash
-php artisan migrate --env=testing
 php artisan test
 ```
 This will execute all test cases to ensure application stability.
